@@ -1,2 +1,2 @@
 # LLang
-L language
+L Language
