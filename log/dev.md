@@ -79,8 +79,27 @@ gcc bison flex
 4、生成代码
 
 
-|
-|
+1 dns负载均衡 高并发的一种架构
+缺点:
+    水平扩展,是一个人工扩展,不太智能
+    高可用有缺陷
+2 nginx
+    接入层
+    单机房lvs(f5)+nginx+keepalived
+    多机房lvs(f5)+nginx+keepalived +dns+域名解析策略 实现异地多活的设计
+
+3异地多活
+  不同区域的机房
+
+
+
+
+
+
+
+
+
+
 
 
 
