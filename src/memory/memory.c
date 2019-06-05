@@ -7,7 +7,7 @@
  *      Version: v0.0.0
  *   Created on: 2015-05-01 20:13:22 by konyka
  *  Modified by: konyka
- *Modified time: 2019-06-05 11:51:57
+ *Modified time: 2019-06-05 12:31:50
  *       Editor: Sublime Text3
  *        Email: 
  *  Description: 
@@ -37,7 +37,7 @@ typedef union {
     long        l_dummy;
     double      d_dummy;
     void        *p_dummy;
-} align;
+} align_union;
 
 #define MARK_SIZE       (4)
 
@@ -50,14 +50,14 @@ typedef struct {
     unsigned char       mark[MARK_SIZE];
 } header_tag;
 
-#define ALIGN_SIZE      (sizeof(align))
+#define ALIGN_SIZE      (sizeof(align_union))
 #define revalue_up_align(val)   ((val) ? (((val) - 1) / ALIGN_SIZE + 1) : 0)
 #define HEADER_ALIGN_SIZE       (revalue_up_align(sizeof(header_tag)))
 #define MARK (0xCD)
 
 union header_union {
     header_tag       s;
-    align               u[HEADER_ALIGN_SIZE];
+    align_union               u[HEADER_ALIGN_SIZE];
 };
 
 static void
@@ -106,38 +106,38 @@ chain_block(mem_controller_tp controller, header_t *new_header)
 }
 
 static void
-rechain_block(mem_controller_tp controller, header_t *header_t)
+rechain_block(mem_controller_tp controller, header_t *header)
 {
-    if (header_t->s.prev) {
-        header_t->s.prev->s.next = header_t;
+    if (header->s.prev) {
+        header->s.prev->s.next = header;
     } else {
-        controller->block_header = header_t;
+        controller->block_header = header;
     }
-    if (header_t->s.next) {
-        header_t->s.next->s.prev = header_t;
+    if (header->s.next) {
+        header->s.next->s.prev = header;
     }
 }
 
 static void
-unchain_block(mem_controller_tp controller, header_t *header_t)
+unchain_block(mem_controller_tp controller, header_t *header)
 {
-    if (header_t->s.prev) {
-        header_t->s.prev->s.next = header_t->s.next;
+    if (header->s.prev) {
+        header->s.prev->s.next = header->s.next;
     } else {
-        controller->block_header = header_t->s.next;
+        controller->block_header = header->s.next;
     }
-    if (header_t->s.next) {
-        header_t->s.next->s.prev = header_t->s.prev;
+    if (header->s.next) {
+        header->s.next->s.prev = header->s.prev;
     }
 }
 
 void
-set_header(header_t *header_t, int size, char *filename, int line)
+set_header(header_t *header, int size, char *filename, int line)
 {
-    header_t->s.size = size;
-    header_t->s.filename = filename;
-    header_t->s.line = line;
-    memset(header_t->s.mark, MARK, (char*)&header_t[1] - (char*)header_t->s.mark);
+    header->s.size = size;
+    header->s.filename = filename;
+    header->s.line = line;
+    memset(header->s.mark, MARK, (char*)&header[1] - (char*)header->s.mark);
 }
 
 void
@@ -162,11 +162,11 @@ check_mark_sub(unsigned char *mark, int size)
 }
 
 void
-check_mark(header_t *header_t)
+check_mark(header_t *header)
 {
     unsigned char       *tail;
-    check_mark_sub(header_t->s.mark, (char*)&header_t[1] - (char*)header_t->s.mark);
-    tail = ((unsigned char*)header_t) + header_t->s.size + sizeof(header_t);
+    check_mark_sub(header->s.mark, (char*)&header[1] - (char*)header->s.mark);
+    tail = ((unsigned char*)header) + header->s.size + sizeof(header_t);
     check_mark_sub(tail, MARK_SIZE);
 }
 #endif /* DEBUG */
