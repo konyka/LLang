@@ -9,6 +9,8 @@ testp : $(OBJS) main.o
 	$(CC) -o $@ $(OBJS) main.o
 .c.o:
 	$(CC) $(CFLAGS) -I../include $*.c
+clean:
+	rm *.o
 main.o: main.c ../include/memory_public.h
 memory.o: memory.c memory.h ../include/memory_public.h
 storage.o: storage.c memory.h ../include/memory_public.h
