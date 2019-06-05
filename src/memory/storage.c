@@ -3,11 +3,11 @@
  *  None Source File.
  *  Copyright (C), DarkBlue Studios.
  * -------------------------------------------------------------------------
- *    File name: storge.c
+ *    File name: storage.c
  *      Version: v0.0.0
  *   Created on: 2015-05-01 20:13:22 by konyka
  *  Modified by: konyka
- *Modified time: 2019-06-05 09:42:37
+ *Modified time: 2019-06-05 11:49:08
  *       Editor: Sublime Text3
  *        Email: 
  *  Description: 
@@ -27,33 +27,34 @@ typedef union {
     long        l_dummy;
     double      d_dummy;
     void        *p_dummy;
-} cell;
+} cell_union;
+typedef cell_union cell_t;
 
-#define CELL_SIZE               (sizeof(cell))
+#define CELL_SIZE               (sizeof(cell_union))
 #define DEFAULT_PAGE_SIZE       (1024)  /* cell num */
 
-typedef struct memory_page_tag memory_page;
-typedef memory_page *memory_page_list;
+typedef struct memory_page_tag memory_page_t;
+typedef memory_page_t *memory_page_list_tp;
 
 struct memory_page_tag {
     int                 cell_num;
     int                 use_cell_num;
-    memory_page_list      next;
-    cell                cell[1];
+    memory_page_list_tp    next;
+    cell_union            cell[1];
 };
 
 struct mem_storage_tag {
-    memory_page_list      page_list;
+    memory_page_list_tp      page_list;
     int                 current_page_size;
 };
 
 #define larger(a, b) (((a) > (b)) ? (a) : (b))
 
-mem_storage
-mem_open_storage_func(mem_controller controller,
+mem_storage_tp
+mem_open_storage_func(mem_controller_tp controller,
                       char *filename, int line, int page_size)
 {
-    mem_storage storage;
+    mem_storage_tp storage;
 
     storage = mem_malloc_func(controller, filename, line,
                               sizeof(struct mem_storage_tag));
@@ -69,12 +70,12 @@ mem_open_storage_func(mem_controller controller,
 }
 
 void*
-mem_storage_malloc_func(mem_controller controller,
-                        char *filename, int line, mem_storage storage,
+mem_storage_malloc_func(mem_controller_tp controller,
+                        char *filename, int line, mem_storage_tp storage,
                         size_t size)
 {
     int                 cell_num;
-    memory_page          *new_page;
+    memory_page_t          *new_page;
     void                *p;
 
     cell_num = ((size - 1) / CELL_SIZE) + 1;
@@ -90,7 +91,7 @@ mem_storage_malloc_func(mem_controller controller,
         alloc_cell_num = larger(cell_num, storage->current_page_size);
 
         new_page = mem_malloc_func(controller, filename, line,
-                                   sizeof(memory_page)
+                                   sizeof(memory_page_t)
                                    + CELL_SIZE * (alloc_cell_num - 1));
         new_page->next = storage->page_list;
         new_page->cell_num = alloc_cell_num;
@@ -104,9 +105,9 @@ mem_storage_malloc_func(mem_controller controller,
 }
 
 void
-mem_dispose_storage_func(mem_controller controller, mem_storage storage)
+mem_dispose_storage_func(mem_controller_tp controller, mem_storage_tp storage)
 {
-    memory_page  *temp;
+    memory_page_t  *temp;
 
     while (storage->page_list) {
         temp = storage->page_list->next;

@@ -7,7 +7,7 @@
  *      Version: v0.0.0
  *   Created on: 2019-06-05 09:43:57 by konyka
  *  Modified by: konyka
- *Modified time: 2019-06-05 09:45:08
+ *Modified time: 2019-06-05 11:44:37
  *       Editor: Sublime Text3
  *        Email: 
  *  Description: 
@@ -28,13 +28,13 @@
 typedef enum {
     MEM_FAIL_AND_EXIT,
     MEM_FAIL_AND_RETURN
-} mem_fail_mode;
+} mem_fail_mode_enum;
 
-typedef struct mem_controller_tag *mem_controller;
-typedef void (*mem_error_handler)(mem_controller, char *, int, char *);
-typedef struct mem_storage_tag *mem_storage;
+typedef struct mem_controller_tag *mem_controller_tp;
+typedef void (*mem_error_handler)(mem_controller_tp, char *, int, char *);
+typedef struct mem_storage_tag *mem_storage_tp;
 
-extern mem_controller mem_default_controller;
+extern mem_controller_tp mem_default_controller;
 
 #ifdef MEM_CONTROLLER
 #define MEM_CURRENT_CONTROLLER MEM_CONTROLLER
@@ -46,30 +46,30 @@ extern mem_controller mem_default_controller;
  * Don't use mem_*_func function.
  * There are private functions of MEM module.
  */
-mem_controller mem_create_controller(void);
-void *mem_malloc_func(mem_controller controller,
+mem_controller_tp mem_create_controller(void);
+void *mem_malloc_func(mem_controller_tp controller,
                       char *filename, int line, size_t size);
-void *mem_realloc_func(mem_controller controller,
+void *mem_realloc_func(mem_controller_tp controller,
                        char *filename, int line, void *ptr, size_t size);
-char *MEM_strdup_func(mem_controller controller,
+char *MEM_strdup_func(mem_controller_tp controller,
                       char *filename, int line, char *str);
-mem_storage mem_open_storage_func(mem_controller controller,
+mem_storage_tp mem_open_storage_func(mem_controller_tp controller,
                                   char *filename, int line, int page_size);
-void *mem_storage_malloc_func(mem_controller controller,
+void *mem_storage_malloc_func(mem_controller_tp controller,
                               char *filename, int line,
-                              mem_storage storage, size_t size);
-void mem_free_func(mem_controller controller, void *ptr);
-void mem_dispose_storage_func(mem_controller controller,
-                              mem_storage storage);
+                              mem_storage_tp storage, size_t size);
+void mem_free_func(mem_controller_tp controller, void *ptr);
+void mem_dispose_storage_func(mem_controller_tp controller,
+                              mem_storage_tp storage);
 
-void mem_set_error_handler(mem_controller controller,
+void mem_set_error_handler(mem_controller_tp controller,
                            mem_error_handler handler);
-void mem_set_fail_mode(mem_controller controller,
-                       mem_fail_mode mode);
-void mem_dump_blocks_func(mem_controller controller, FILE *fp);
-void mem_check_block_func(mem_controller controller,
+void mem_set_fail_mode(mem_controller_tp controller,
+                       mem_fail_mode_enum mode);
+void mem_dump_blocks_func(mem_controller_tp controller, FILE *fp);
+void mem_check_block_func(mem_controller_tp controller,
                           char *filename, int line, void *p);
-void mem_check_all_blocks_func(mem_controller controller,
+void mem_check_all_blocks_func(mem_controller_tp controller,
                                char *filename, int line);
 
 #define mem_malloc(size)\
