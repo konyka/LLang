@@ -7,7 +7,7 @@
  *      Version: v0.0.0
  *   Created on: 2015-05-01 20:43:54 by konyka
  *  Modified by: konyka
- *Modified time: 2019-06-04 22:47:44
+ *Modified time: 2019-06-05 09:41:19
  *       Editor: Sublime Text3
  *        Email: 
  *  Description: 
@@ -21,16 +21,19 @@
 #ifndef __DARKBLUE_MEMORY_H__
 #define __DARKBLUE_MEMORY_H__
 
-#include "../include/memory.h"
+//private
+#include "memory_public.h"
 
 typedef union header_tag header;
 
 
 struct mem_controller_tag {
-    FILE                *error_fp;
-    mem_error_handler   error_handler;
-    mem_fail_mode       fail_mode;
-    header              *block_header;
+    FILE        *error_fp;
+    mem_error_handler    error_handler;
+    mem_fail_mode        fail_mode;
+    header      *block_header;
 };
+//end private
 
 #endif /* __DARKBLUE_MEMORY_H__ */
+
