@@ -3,11 +3,11 @@
  *  None Source File.
  *  Copyright (C), DarkBlue Studios.
  * -------------------------------------------------------------------------
- *    File name: memory.h
+ *    File name: error_message_not_gcc.c
  *      Version: v0.0.0
- *   Created on: 2015-05-01 20:43:54 by konyka
+ *   Created on: 2015-05-05 14:50:32 by konyka
  *  Modified by: konyka
- *Modified time: 2019-06-05 15:11:58
+ *Modified time: 2019-06-05 18:25:39
  *       Editor: Sublime Text3
  *        Email: 
  *  Description: 
@@ -18,22 +18,16 @@
  */
  
 
-#ifndef __DARKBLUE_MEMORY_H__
-#define __DARKBLUE_MEMORY_H__
-
-//private
-#include "memory_public.h"
-
-typedef union header_union header_t;
 
 
-struct mem_controller_tag {
-    FILE        *error_fp;
-    mem_error_handler    error_handler;
-    mem_fail_mode_enum        fail_mode;
-    header_t      *block_header;
+
+#include <string.h>
+#include "povm_pri.h"
+
+error_tag dvm_error_message_format[] = {
+    {"dummy"},
+    {"不正确的多字节字符。"},
+    {"找不到函数$(name)。"},
+    {"重复定义函数$(name)。"},
+    {"dummy"}
 };
-//end private
-
-#endif /* __DARKBLUE_MEMORY_H__ */
-

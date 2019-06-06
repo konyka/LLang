@@ -5,9 +5,9 @@
  * -------------------------------------------------------------------------
  *    File name: memory_public.h
  *      Version: v0.0.0
- *   Created on: 2019-06-05 09:43:57 by konyka
+ *   Created on: 2015-05-05 09:43:57 by konyka
  *  Modified by: konyka
- *Modified time: 2019-06-05 11:44:37
+ *Modified time: 2019-06-06 11:18:10
  *       Editor: Sublime Text3
  *        Email: 
  *  Description: 
@@ -21,7 +21,10 @@
 #ifndef __DARKBLUE_MEMORY_PUBLIC_H__
 #define __DARKBLUE_MEMORY_PUBLIC_H__
 
-//public
+/* 
+ *public
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -100,7 +103,9 @@ void mem_check_all_blocks_func(mem_controller_tp controller,
 #define mem_check_block(p)  ((void)0)
 #define mem_check_all_blocks() ((void)0)
 #endif /* DEBUG */
-//end public
+/* 
+ * end public
+ */
 
 #endif /* __DARKBLUE_MEMORY_PUBLIC_H__ */
 
